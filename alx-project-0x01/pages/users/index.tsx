@@ -1,14 +1,14 @@
 // pages/users/index.tsx
 import Header from "@/components/layout/Header";
-import UserCard from "@/components/common/UserCard"; // Import the new UserCard component
-import { UserProps } from "@/interfaces"; // Import the UserProps interface
+import UserCard from "@/components/common/UserCard";
+import { UserProps } from "@/interfaces";
 
 interface UsersPageProps {
-  users: UserProps[]; // Change 'posts' to 'users' to match the data being fetched
+  users: UserProps[]; // The prop name is 'users'
 }
 
 const Users: React.FC<UsersPageProps> = ({ users }) => {
-  console.log(users); // For debugging: check fetched users in console
+  // console.log(users); // Uncomment for debugging if needed
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -21,9 +21,10 @@ const Users: React.FC<UsersPageProps> = ({ users }) => {
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* CORRECT: Mapping over 'users' */}
             {users?.map((user: UserProps) => (
               <UserCard
-                key={user.id} // Use user.id as the key
+                key={user.id}
                 id={user.id}
                 name={user.name}
                 username={user.username}
@@ -41,28 +42,27 @@ const Users: React.FC<UsersPageProps> = ({ users }) => {
   );
 };
 
-// getStaticProps is used for pre-rendering data at build time
 export async function getStaticProps() {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/users");
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const users: UserProps[] = await response.json(); // Change 'posts' to 'users'
+    const users: UserProps[] = await response.json();
 
     return {
       props: {
-        users, // Pass 'users' as props
+        users, // The data passed as a prop is named 'users'
       },
-      revalidate: 60, // Optional: Re-generate the page every 60 seconds
+      revalidate: 60,
     };
   } catch (error) {
     console.error("Failed to fetch users:", error);
     return {
       props: {
-        users: [], // Return empty array on error
+        users: [],
       },
-      revalidate: 10, // Re-attempt revalidation more frequently on error
+      revalidate: 10,
     };
   }
 }
