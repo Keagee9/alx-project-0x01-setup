@@ -78,3 +78,9 @@ export interface UserModalProps {
 }
 
 
+import { UserProps } from "@/interfaces"; // if defined elsewhere
+
+export interface UserModalProps {
+  onClose: () => void;
+  onSubmit: (post: UserProps) => void;
+}
